@@ -3,6 +3,7 @@ import ProgressBar from './ProgressBar'
 import QuestionAnswer from './QuestionAnswer'
 import ScoreProgress from './ScoreProgress'
 import styled from 'styled-components'
+import questionJson from '../questions.json'
 
 const Placeholder = styled.div`
   width: 75%;
@@ -15,11 +16,9 @@ const ScorePlaceholder = styled.div`
   width: inherit;
 `
 
-const QUESTIONS_API_URL = 'https://raw.githubusercontent.com/outlier-org/challenge-quiz/master/src/questions.json'
-
 const QuestionPlaceholder = () => {
 
-  const [questions, setQuestions] = useState([])
+  const [questions, setQuestions] = useState(questionJson)
   const [isQuizFinished, setIsQuizFinished] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [score, setScore] = useState({
@@ -27,12 +26,7 @@ const QuestionPlaceholder = () => {
     maxScore: 100,
     lowestScore: 0
   })
-
-  const fetchQuestions = async () => {
-    const response = await fetch(QUESTIONS_API_URL)
-    return response.json()
-  }
-
+  
   const handleNextQuestion = () => {
     if (currentQuestion === questions.length - 1) {
       setIsQuizFinished(true)
@@ -48,12 +42,6 @@ const QuestionPlaceholder = () => {
     }
     setQuestions(tempQuestions)
   }
-
-  useEffect(() => {
-    fetchQuestions().then((data) => {
-      setQuestions(data)
-    })
-  }, [])
 
   useEffect(() => {
     const totalCorrectAns = questions.filter(o => o.isAnswerCorrect).length || 0
