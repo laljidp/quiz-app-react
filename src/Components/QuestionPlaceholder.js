@@ -26,7 +26,7 @@ const QuestionPlaceholder = () => {
     maxScore: 100,
     lowestScore: 0
   })
-  
+
   const handleNextQuestion = () => {
     if (currentQuestion === questions.length - 1) {
       setIsQuizFinished(true)
@@ -49,7 +49,7 @@ const QuestionPlaceholder = () => {
     const totalAttempt = currentQuestion
     const currentScore = (totalCorrectAns / totalAttempt) * 100
     const maxScore = ((totalCorrectAns + (totalQuestion - totalAttempt)) / totalQuestion) * 100
-    const lowestScore = (totalCorrectAns  / totalQuestion) * 100
+    const lowestScore = (totalCorrectAns / totalQuestion) * 100
     setScore({
       currentScore: Math.round(currentScore) || 0,
       maxScore: Math.round(maxScore),
@@ -87,6 +87,7 @@ const QuestionPlaceholder = () => {
                   question={questions[currentQuestion]}
                   currentQuestion={currentQuestion}
                   saveCurrentAnswer={handleSaveAnswer}
+                  totalQuestion={questions.length}
                 />
               )
             }

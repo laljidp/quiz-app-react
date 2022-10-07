@@ -21,7 +21,13 @@ const OptionButton = styled.button`
 `
 
 const QuestionAnswer = (props) => {
-  const { question = {}, handleNextQuestion, currentQuestion, saveCurrentAnswer } = props
+  const {
+    question = {},
+    handleNextQuestion,
+    currentQuestion,
+    saveCurrentAnswer,
+    totalQuestion
+  } = props
 
   const [options, setOptions] = useState(
     shuffleArray([question.correct_answer, ...question.incorrect_answers]) || []
@@ -46,7 +52,6 @@ const QuestionAnswer = (props) => {
     setOptions(
       shuffleArray([question.correct_answer, ...question.incorrect_answers]) || []
     )
-
   }, [question])
 
 
@@ -102,7 +107,9 @@ const QuestionAnswer = (props) => {
           {answer.isAnswered && (
             <>
               <h3>{answer.selectedAnswer === decodeString(question.correct_answer) ? 'Correct !' : 'Sorry !'}</h3>
-              <button className="btn btn-outline-secondary mt-2" onClick={handleNext}>Next Question</button>
+              <button className="btn btn-outline-secondary mt-2" onClick={handleNext}>
+                {currentQuestion + 1 === totalQuestion ? 'Finish': 'Next Question'}
+                </button>
             </>
           )}
         </div>
