@@ -1,6 +1,7 @@
 {
   "name": "challenge-quiz",
   "version": "0.1.0",
+  "homepage": "https://laljidp.github.io/quiz-app", 
   "private": true,
   "dependencies": {
     "react": "^16.8.6",
