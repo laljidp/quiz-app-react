@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { decodeString, shuffleArray } from "../helperFunc";
+import { decodeObject, shuffleArray } from "../Utils/helperFunc";
 import styled from "styled-components";
 
 const CategoryText = styled.span`
@@ -29,8 +29,16 @@ const QuestionAnswer = (props) => {
     totalQuestion
   } = props
 
+  const {
+    correct_answer,
+    incorrect_answers,
+    category,
+    difficulty,
+    question: questionTitle
+  } = decodeObject(question)
+
   const [options, setOptions] = useState(
-    shuffleArray([question.correct_answer, ...question.incorrect_answers]) || []
+    shuffleArray([correct_answer, ...incorrect_answers]) || []
   )
   const [answer, setAnswer] = useState({
     selectedAnswer: null,
@@ -50,8 +58,9 @@ const QuestionAnswer = (props) => {
 
   useEffect(() => {
     setOptions(
-      shuffleArray([question.correct_answer, ...question.incorrect_answers]) || []
+      shuffleArray([correct_answer, ...incorrect_answers]) || []
     )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [question])
 
 
@@ -73,43 +82,45 @@ const QuestionAnswer = (props) => {
     setAnswer({
       selectedAnswer: selectedAns,
       isAnswered: true,
-      isAnswerCorrect: selectedAns === decodeString(question.correct_answer)
+      isAnswerCorrect: selectedAns === correct_answer
     })
   }
 
   return (
     <div className="text-left">
-      <CategoryText>{decodeString(question.category)}</CategoryText>
-      <p>{renderDifficulty(question.difficulty)}</p>
-      <h5>{decodeString(question.question)}</h5>
+      <CategoryText>{category}</CategoryText>
+      <p>{renderDifficulty(difficulty)}</p>
+      <h5>{questionTitle}</h5>
       <div className="mt-5 d-grid">
         <div className="d-flex justify-content-between mb-4">
           {options.slice(0, 2).map((option) => (
             <OptionButton
+              key={option}
               onClick={handleAnswerClick}
-              disabled={answer.isAnswered && decodeString(option) !== answer.selectedAnswer}
-              isCorrect={answer.isAnswered && decodeString(option) === decodeString(question.correct_answer)}
-            >{decodeString(option)}
+              disabled={answer.isAnswered && option !== answer.selectedAnswer}
+              isCorrect={answer.isAnswered && (option === correct_answer)}
+            >{option}
             </OptionButton>
           ))}
         </div>
         <div className="d-flex justify-content-between">
           {options.slice(2, 4).map((option) => (
             <OptionButton
+              key={option}
               onClick={handleAnswerClick}
-              isCorrect={answer.isAnswered && decodeString(option) === decodeString(question.correct_answer)}
-              disabled={answer.isAnswered && decodeString(option) !== answer.selectedAnswer}
-            >{decodeString(option)}
+              isCorrect={answer.isAnswered && option === correct_answer}
+              disabled={answer.isAnswered && option !== answer.selectedAnswer}
+            >{option}
             </OptionButton>
           ))}
         </div>
         <div className="mt-5 text-center">
           {answer.isAnswered && (
             <>
-              <h3>{answer.selectedAnswer === decodeString(question.correct_answer) ? 'Correct !' : 'Sorry !'}</h3>
+              <h3>{answer.selectedAnswer === correct_answer ? 'Correct !' : 'Sorry !'}</h3>
               <button className="btn btn-outline-secondary mt-2" onClick={handleNext}>
-                {currentQuestion + 1 === totalQuestion ? 'Finish': 'Next Question'}
-                </button>
+                {currentQuestion + 1 === totalQuestion ? 'Finish' : 'Next Question'}
+              </button>
             </>
           )}
         </div>

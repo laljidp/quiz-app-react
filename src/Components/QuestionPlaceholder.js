@@ -34,16 +34,7 @@ const QuestionPlaceholder = () => {
     setCurrentQuestion(currentQuestion + 1)
   }
 
-  const handleSaveAnswer = (index, isAnswerCorrect) => {
-    const tempQuestions = questions.slice()
-    tempQuestions[index] = {
-      ...tempQuestions[index],
-      isAnswerCorrect
-    }
-    setQuestions(tempQuestions)
-  }
-
-  useEffect(() => {
+  const calculateProgress = () => {
     const totalCorrectAns = questions.filter(o => o.isAnswerCorrect).length || 0
     const totalQuestion = questions.length
     const totalAttempt = currentQuestion
@@ -55,9 +46,21 @@ const QuestionPlaceholder = () => {
       maxScore: Math.round(maxScore),
       lowestScore: Math.round(lowestScore)
     })
+  }
+
+  const handleSaveAnswer = (index, isAnswerCorrect) => {
+    const tempQuestions = questions.slice()
+    tempQuestions[index] = {
+      ...tempQuestions[index],
+      isAnswerCorrect
+    }
+    setQuestions(tempQuestions)
+  }
+
+  useEffect(() => {
+    calculateProgress()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questions])
-
 
   return (
     <>
@@ -99,7 +102,6 @@ const QuestionPlaceholder = () => {
         <ScoreProgress currentScore={score.currentScore} maxScore={score.maxScore} lowestScore={score.lowestScore} />
       </ScorePlaceholder>
     </>
-
   )
 }
 
